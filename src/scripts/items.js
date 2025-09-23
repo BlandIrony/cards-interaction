@@ -2,8 +2,9 @@ export class Item {
     // DOM elements
     DOM = {
         // main element
-        el: null
+        el: null,
         // Other Elements
+        price: null,
     }
 
     /**
@@ -12,5 +13,6 @@ export class Item {
      */
     constructor(DOM_el) {
         this.DOM.el = DOM_el;
+        this.DOM.price = this.DOM.el.querySelector('.price');
     }
 }

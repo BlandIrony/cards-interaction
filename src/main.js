@@ -1,25 +1,6 @@
 import { Item } from "./scripts/items.js";
 import { preloadImages, createArray } from "./scripts/utils.js";
-import Lenis from "lenis";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
-
-// Initialize a new Lenis instance for smooth scrolling
-const lenis = new Lenis();
-
-// Synchronize Lenis scrolling with GSAP's ScrollTrigger plugin
-lenis.on('scroll', ScrollTrigger.update);
-
-// Add Lenis's requestAnimationFrame (raf) method to GSAP's ticker
-// This ensures Lenis's smooth scroll animation updates on each GSAP tick
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000); // Convert time from seconds to milliseconds
-});
-
-// Disable lag smoothing in GSAP to prevent any delay in scroll animations
-gsap.ticker.lagSmoothing(0);
 
 const cardWrapper = document.querySelector('.card-wrapper');
 
@@ -49,21 +30,60 @@ class Home {
         duration: 1.5,
         ease: "elastic.out",
         delay: i * 0.04,
-
       })
     })
   }
 
   mouseInteraction() {
-    cardWrapper.addEventListener('mouseenter', (e) => {
-      cards.forEach((card, i) => {
-        gsap.to(card.DOM.el, {
-          rotateY: (-i * 55) / 2,
-          duration: 0.5,
-          ease: "power2.out"
-        })
+    const hoverTimeline = gsap.timeline({ paused: true });
+
+    hoverTimeline.to(cardWrapper, {
+      scale: 1.1,
+      transformOrigin: '50% 50%',
+      duration: 0.2,
+      ease: "power2.inOut"
+    }, 0);
+
+    cards.forEach((card, i) => {
+      hoverTimeline.to(card.DOM.el, {
+        rotateY: -40,
+        x: i * 100,
+        y: -i * 2,
+        z: -i * 50,
+        duration: 0.5,
+        ease: "power2.inOut"
+      }, "<0.015");
+    });
+
+    cardWrapper.addEventListener("mouseenter", () => hoverTimeline.play());
+    cardWrapper.addEventListener("mouseleave", () => hoverTimeline.reverse());
+    
+    cards.forEach((card) => {
+      card.DOM.el.addEventListener('mouseenter', () => {
+        this.showPrice(card);
+      })
+      card.DOM.el.addEventListener('mouseleave', () => {
+        this.hidePrice(card);
       })
     })
+  }
+
+  showPrice(card) {
+    gsap.to(card.DOM.price, {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: "power2.inOut"
+    });
+  }
+
+  hidePrice(card) {
+    gsap.to(card.DOM.price, {
+      opacity: 0,
+      y: 20,
+      duration: 0.5,
+      ease: "power2.inOut"
+    });
   }
 }
 
