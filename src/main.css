@@ -58,9 +58,16 @@ html {
 
 
 body {
-  font-family: var(--font-clash-b), sans-serif;
+  font-family: var(--font-dmsans-r), sans-serif;
   background-color: var(--primary-color);
-  color: var(--secondary-color);
+  color: var(--color-col-cream);
+  overflow: hidden;
+}
+
+.card {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 html.lenis,

@@ -22,4 +22,6 @@ const isInViewport = elem => {
     );
 };
 
-export { preloadImages, isInViewport };
+const createArray = (length) => Array.from({length: length}, (value, index) => index)
+
+export { preloadImages, isInViewport, createArray };
