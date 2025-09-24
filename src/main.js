@@ -14,10 +14,13 @@ const order = createArray(cards.length)
 class Home {
   constructor () {
     this.initAnimation();
-    this.mouseInteraction();
+    this.initialYValue = null;
+    this.isCompleted = false;
   }
 
   initAnimation () {
+    let completedCount = 0;
+    
     cards.forEach((card, i) => {
       gsap.set(card.DOM.el, { autoAlpha: 0, y: 600, force3D: true })
       let pos = order.indexOf(i);
@@ -30,11 +33,19 @@ class Home {
         duration: 1.5,
         ease: "elastic.out",
         delay: i * 0.04,
+        onComplete: () => {
+          completedCount++;
+          if (completedCount === cards.length) {
+            this.mouseInteraction()
+          }
+        }
       })
     })
   }
 
   mouseInteraction() {
+    if (this.isCompleted) return;
+
     const hoverTimeline = gsap.timeline({ paused: true });
 
     hoverTimeline.to(cardWrapper, {
@@ -69,6 +80,11 @@ class Home {
   }
 
   showPrice(card) {
+    this.initialYValue = gsap.getProperty(card.DOM.el, "y")
+    
+    gsap.to(card.DOM.el, {
+      y: -45,
+    })
     gsap.to(card.DOM.price, {
       opacity: 1,
       y: 0,
@@ -78,6 +94,9 @@ class Home {
   }
 
   hidePrice(card) {
+    gsap.to(card.DOM.el, {
+      y: this.initialYValue,
+    })
     gsap.to(card.DOM.price, {
       opacity: 0,
       y: 20,
