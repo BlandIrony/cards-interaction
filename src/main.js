@@ -15,7 +15,6 @@ class Home {
   constructor () {
     this.initAnimation();
     this.initialYValue = null;
-    this.isCompleted = false;
   }
 
   initAnimation () {
@@ -44,8 +43,6 @@ class Home {
   }
 
   mouseInteraction() {
-    if (this.isCompleted) return;
-
     const hoverTimeline = gsap.timeline({ paused: true });
 
     hoverTimeline.to(cardWrapper, {
