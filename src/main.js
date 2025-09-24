@@ -45,6 +45,7 @@ class Home {
 
   mouseInteraction() {
     if (this.isCompleted) return;
+
     const hoverTimeline = gsap.timeline({ paused: true });
 
     hoverTimeline.to(cardWrapper, {
